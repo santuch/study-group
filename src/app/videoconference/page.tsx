@@ -39,17 +39,23 @@ export default function VideoConferenceApp() {
     };
 
     return (
-        <div className="flex h-screen bg-gray-50">
-            <div className="flex-1 flex flex-col p-6">
+        <div className="flex h-screen w-screen bg-gray-50">
+            <div className="flex-1 flex flex-col p-6 overflow-hidden">
                 <h1 className="text-2xl font-bold mb-4">
                     Study Group Video Conference
                 </h1>
-                <div className="flex-1 grid grid-cols-2 gap-6">
+                <div className="flex-1 grid grid-cols-2 gap-6 overflow-auto">
                     <Card className="aspect-video bg-blue-800 flex items-center justify-center text-white">
-                        Main Video Feed
+                        You
                     </Card>
                     <Card className="aspect-video bg-blue-700 flex items-center justify-center text-white">
-                        Secondary Video Feed
+                        Jane Smith
+                    </Card>
+                    <Card className="aspect-video bg-blue-700 flex items-center justify-center text-white">
+                        Alice Johnson
+                    </Card>
+                    <Card className="aspect-video bg-blue-700 flex items-center justify-center text-white">
+                        Bob Williams
                     </Card>
                 </div>
                 <div className="mt-6 p-4 bg-white shadow-md rounded-lg">
@@ -96,9 +102,9 @@ export default function VideoConferenceApp() {
                 </div>
             </div>
             {isParticipantListVisible && (
-                <Card className="w-72 p-6 m-6 bg-white rounded-lg shadow-md">
+                <Card className="w-72 p-6 m-6 bg-white rounded-lg shadow-md h-full">
                     <h2 className="text-xl font-semibold mb-4">Participants</h2>
-                    <ScrollArea className="h-[calc(100vh-15rem)]">
+                    <ScrollArea className="h-full">
                         <ul className="space-y-3">
                             {participants.map((participant) => (
                                 <li
@@ -116,9 +122,9 @@ export default function VideoConferenceApp() {
                 </Card>
             )}
             {isChatVisible && (
-                <Card className="w-72 p-6 m-6 bg-white rounded-lg shadow-md">
+                <Card className="w-72 p-6 m-6 bg-white rounded-lg shadow-md h-full">
                     <h2 className="text-xl font-semibold mb-4">Messages</h2>
-                    <ScrollArea className="h-[calc(100vh-15rem)]">
+                    <ScrollArea className="h-full">
                         <ul className="space-y-3">
                             {messages.map((msg, idx) => (
                                 <li key={idx} className="text-sm text-gray-800">
