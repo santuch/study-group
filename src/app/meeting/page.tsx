@@ -21,13 +21,30 @@ import {
     Link as LinkIcon,
     Image as ImageIcon,
     Calendar as CalendarIcon,
+    Video,
 } from "lucide-react";
 
 // Mock data for demonstration
 const mockMessages = [
-    { id: 1, sender: "Alice", content: "Hey everyone! Ready for today’s session?", timestamp: "10:00 AM" },
-    { id: 2, sender: "Bob", content: "Yes, I've got my notes ready!", timestamp: "10:02 AM" },
-    { id: 3, sender: "Charlie", content: "I have a question about last week's topic. Can we discuss that first?", timestamp: "10:05 AM" },
+    {
+        id: 1,
+        sender: "Alice",
+        content: "Hey everyone! Ready for today’s session?",
+        timestamp: "10:00 AM",
+    },
+    {
+        id: 2,
+        sender: "Bob",
+        content: "Yes, I've got my notes ready!",
+        timestamp: "10:02 AM",
+    },
+    {
+        id: 3,
+        sender: "Charlie",
+        content:
+            "I have a question about last week's topic. Can we discuss that first?",
+        timestamp: "10:05 AM",
+    },
 ];
 
 const mockResources = [
@@ -53,51 +70,62 @@ const getFileIcon = (type) => {
     };
     return icons[type] || <FileText />;
 };
+const handleStartMeeting = () => {
+    alert("Meeting has started!");
+    // You can add further logic here to integrate with a video conferencing service.
+};
 
 // Group Chat Component (Memoized to prevent unnecessary re-renders)
-const GroupChat = memo(({ messages, newMessage, setNewMessage, handleSendMessage }) => {
-    const scrollRef = useRef(null);
+const GroupChat = memo(
+    ({ messages, newMessage, setNewMessage, handleSendMessage }) => {
+        const scrollRef = useRef(null);
 
-    useEffect(() => {
-        // Scroll to the bottom when messages update
-        if (scrollRef.current) {
-            scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
-        }
-    }, [messages]);
+        useEffect(() => {
+            // Scroll to the bottom when messages update
+            if (scrollRef.current) {
+                scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+            }
+        }, [messages]);
 
-    return (
-        <Card className="md:col-span-2 flex flex-col h-[500px]">
-            <CardHeader>
-                <CardTitle>Group Chat</CardTitle>
-            </CardHeader>
-            <CardContent className="flex-grow overflow-y-auto" ref={scrollRef}>
-                <ScrollArea>
-                    {messages.map(({ id, sender, content, timestamp }) => (
-                        <div key={id} className="mb-4">
-                            <div className="font-semibold">{sender}</div>
-                            <div>{content}</div>
-                            <div className="text-sm text-muted-foreground">{timestamp}</div>
-                        </div>
-                    ))}
-                </ScrollArea>
-            </CardContent>
-            <CardFooter className="border-t border-gray-200">
-                <form onSubmit={handleSendMessage} className="flex w-full">
-                    <Input
-                        value={newMessage}
-                        onChange={(e) => setNewMessage(e.target.value)}
-                        placeholder="Type your message..."
-                        className="flex-grow mr-2"
-                        aria-label="New message"
-                    />
-                    <Button type="submit" aria-label="Send message">
-                        <Send className="mr-2" /> Send
-                    </Button>
-                </form>
-            </CardFooter>
-        </Card>
-    );
-});
+        return (
+            <Card className="md:col-span-2 flex flex-col h-[500px]">
+                <CardHeader>
+                    <CardTitle>Group Chat</CardTitle>
+                </CardHeader>
+                <CardContent
+                    className="flex-grow overflow-y-auto"
+                    ref={scrollRef}
+                >
+                    <ScrollArea>
+                        {messages.map(({ id, sender, content, timestamp }) => (
+                            <div key={id} className="mb-4">
+                                <div className="font-semibold">{sender}</div>
+                                <div>{content}</div>
+                                <div className="text-sm text-muted-foreground">
+                                    {timestamp}
+                                </div>
+                            </div>
+                        ))}
+                    </ScrollArea>
+                </CardContent>
+                <CardFooter className="border-t border-gray-200">
+                    <form onSubmit={handleSendMessage} className="flex w-full">
+                        <Input
+                            value={newMessage}
+                            onChange={(e) => setNewMessage(e.target.value)}
+                            placeholder="Type your message..."
+                            className="flex-grow mr-2"
+                            aria-label="New message"
+                        />
+                        <Button type="submit" aria-label="Send message">
+                            <Send className="mr-2" /> Send
+                        </Button>
+                    </form>
+                </CardFooter>
+            </Card>
+        );
+    }
+);
 
 export default function MeetingInterface() {
     const [messages, setMessages] = useState(mockMessages);
@@ -124,10 +152,17 @@ export default function MeetingInterface() {
     return (
         <div className="container mx-auto p-4">
             <header className="flex justify-between items-center mb-6">
-                <h1 className="text-2xl font-bold">Advanced Calculus Study Group - Week 5 Session</h1>
-                <Button variant="outline" aria-label="Back to group list">
-                    <ArrowLeft className="mr-2" /> Back to Group List
-                </Button>
+                <h1 className="text-2xl font-bold">
+                    Advanced Calculus Study Group - Week 5 Session
+                </h1>
+                <div className="flex space-x-4">
+                    <Button variant="destructive" onClick={handleStartMeeting}>
+                        <Video className="mr-2" /> Start Meeting
+                    </Button>
+                    <Button variant="outline" aria-label="Back to group list">
+                        <ArrowLeft className="mr-2" /> Back to Group List
+                    </Button>
+                </div>
             </header>
 
             <div className="grid gap-6 md:grid-cols-3">
@@ -173,8 +208,12 @@ export default function MeetingInterface() {
                             />
                         </CardContent>
                         <CardFooter>
-                            <Button variant="outline" aria-label="Schedule new session">
-                                <CalendarIcon className="mr-2" /> Schedule New Session
+                            <Button
+                                variant="outline"
+                                aria-label="Schedule new session"
+                            >
+                                <CalendarIcon className="mr-2" /> Schedule New
+                                Session
                             </Button>
                         </CardFooter>
                     </Card>
@@ -185,28 +224,43 @@ export default function MeetingInterface() {
                         </CardHeader>
                         <CardContent>
                             <ul className="space-y-2">
-                                {mockMembers.map(({ id, name, status, initials }) => (
-                                    <li key={id} className="flex items-center justify-between">
-                                        <div className="flex items-center">
-                                            <Avatar className="h-8 w-8 mr-2">
-                                                <AvatarImage src={`/avatars/${id}.png`} alt={name} />
-                                                <AvatarFallback>{initials}</AvatarFallback>
-                                            </Avatar>
-                                            <span>{name}</span>
-                                        </div>
-                                        <span
-                                            className={`text-sm ${
-                                                status === "online" ? "text-green-500" : "text-gray-500"
-                                            }`}
+                                {mockMembers.map(
+                                    ({ id, name, status, initials }) => (
+                                        <li
+                                            key={id}
+                                            className="flex items-center justify-between"
                                         >
-                                            {status}
-                                        </span>
-                                    </li>
-                                ))}
+                                            <div className="flex items-center">
+                                                <Avatar className="h-8 w-8 mr-2">
+                                                    <AvatarImage
+                                                        src={`/avatars/${id}.png`}
+                                                        alt={name}
+                                                    />
+                                                    <AvatarFallback>
+                                                        {initials}
+                                                    </AvatarFallback>
+                                                </Avatar>
+                                                <span>{name}</span>
+                                            </div>
+                                            <span
+                                                className={`text-sm ${
+                                                    status === "online"
+                                                        ? "text-green-500"
+                                                        : "text-gray-500"
+                                                }`}
+                                            >
+                                                {status}
+                                            </span>
+                                        </li>
+                                    )
+                                )}
                             </ul>
                         </CardContent>
                         <CardFooter>
-                            <Button variant="outline" aria-label="Send direct message">
+                            <Button
+                                variant="outline"
+                                aria-label="Send direct message"
+                            >
                                 Send Direct Message
                             </Button>
                         </CardFooter>

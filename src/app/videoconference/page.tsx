@@ -44,17 +44,17 @@ export default function VideoConferenceApp() {
                 <h1 className="text-2xl font-bold mb-4">
                     Study Group Video Conference
                 </h1>
-                <div className="flex-1 grid grid-cols-2 gap-6 overflow-auto">
-                    <Card className="aspect-video bg-blue-800 flex items-center justify-center text-white">
+                <div className="flex-1 grid grid-cols-2 gap-6 overflow-auto h-auto w-auto">
+                    <Card className=" bg-blue-800 flex items-center justify-center text-white">
                         You
                     </Card>
-                    <Card className="aspect-video bg-blue-700 flex items-center justify-center text-white">
+                    <Card className=" bg-blue-700 flex items-center justify-center text-white">
                         Jane Smith
                     </Card>
-                    <Card className="aspect-video bg-blue-700 flex items-center justify-center text-white">
+                    <Card className=" bg-blue-700 flex items-center justify-center text-white">
                         Alice Johnson
                     </Card>
-                    <Card className="aspect-video bg-blue-700 flex items-center justify-center text-white">
+                    <Card className=" bg-blue-700 flex items-center justify-center text-white">
                         Bob Williams
                     </Card>
                 </div>
